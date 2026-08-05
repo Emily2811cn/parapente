@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import './extra.css';
 import logo from './assets/logo.png';
 
 const API = import.meta.env.VITE_API_URL || '/api';
@@ -31,14 +32,14 @@ function GiftCard({ data, final = false }) {
 }
 
 function Admin() {
-  const [data, setData] = useState(empty); const [status, setStatus] = useState('');
+  const [data, setData] = useState(empty); const [status, setStatus] = useState(''); const [createdUrl, setCreatedUrl] = useState('');
   const update = e => setData(v => ({ ...v, [e.target.name]: e.target.value }));
-  const create = async e => { e.preventDefault(); setStatus('Generando enlace…');
+  const create = async e => { e.preventDefault(); setStatus('Generando enlace…'); setCreatedUrl('');
     try { const r = await fetch(`${API}/invitations`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }); const body = await r.json(); if (!r.ok) throw new Error(body.error || 'No se pudo crear la invitación');
-      await navigator.clipboard?.writeText(body.invitationUrl); setStatus(`¡Lista! Enlace copiado: ${body.invitationUrl}`);
+      await navigator.clipboard?.writeText(body.invitationUrl); setCreatedUrl(body.invitationUrl); setStatus('¡Invitación creada! El enlace se copió automáticamente.');
     } catch (err) { setStatus(err.message); }
   };
-  return <main className="admin-page"><section className="intro"><img src={logo} alt="Ecuador Parapente"/><p>Panel de invitaciones</p><h2>Regala una vista<br/>que nunca olvidarán.</h2><p className="muted">Personaliza y envía una experiencia de vuelo inolvidable.</p></section><section className="workspace"><form onSubmit={create}><div className="form-heading"><span>01</span><div><p>DETALLES DE LA INVITACIÓN</p><h2>Crea un vale de regalo</h2></div></div><label>Nombre del cliente<input required name="clientName" value={data.clientName} onChange={update} placeholder="Ej. María López" /></label><div className="two-columns"><label>Fecha de cumpleaños <small>(opcional)</small><input type="date" name="birthday" value={data.birthday} onChange={update}/></label><label>Fecha del vuelo<input required type="date" name="flightDate" value={data.flightDate} onChange={update}/></label></div><label>De parte de<input name="from" value={data.from} onChange={update}/></label><label>Mensaje especial <small>(opcional)</small><textarea name="message" value={data.message} onChange={update} placeholder="Se usará el mensaje predeterminado si lo dejas vacío." rows="4"/></label><button type="submit">Generar invitación <span>→</span></button>{status && <p className="status">{status}</p>}</form><div className="preview"><p>VISTA PREVIA EN VIVO</p><GiftCard data={data}/></div></section></main>;
+  return <main className="admin-page"><section className="intro"><img src={logo} alt="Ecuador Parapente"/><p>Panel de invitaciones</p><h2>Regala una vista<br/>que nunca olvidarán.</h2><p className="muted">Personaliza y envía una experiencia de vuelo inolvidable.</p></section><section className="workspace"><form onSubmit={create}><div className="form-heading"><span>01</span><div><p>DETALLES DE LA INVITACIÓN</p><h2>Crea un vale de regalo</h2></div></div><label>Nombre del cliente<input required name="clientName" value={data.clientName} onChange={update} placeholder="Ej. María López" /></label><div className="two-columns"><label>Fecha de cumpleaños <small>(opcional)</small><input type="date" name="birthday" value={data.birthday} onChange={update}/></label><label>Fecha del vuelo<input required type="date" name="flightDate" value={data.flightDate} onChange={update}/></label></div><label>De parte de<input name="from" value={data.from} onChange={update}/></label><label>Mensaje especial <small>(opcional)</small><textarea name="message" value={data.message} onChange={update} placeholder="Se usará el mensaje predeterminado si lo dejas vacío." rows="4"/></label><button type="submit">Generar invitación <span>→</span></button>{status && <p className="status">{status}</p>}{createdUrl && <div className="created-link"><span>ENLACE PARA ENVIAR AL CLIENTE</span><a href={createdUrl} target="_blank" rel="noreferrer">{createdUrl}</a></div>}</form><div className="preview"><p>VISTA PREVIA EN VIVO</p><GiftCard data={data}/></div></section></main>;
 }
 
 function PublicInvitation({ code }) {
