@@ -1,0 +1,16 @@
+[Unit]
+Description=API de invitaciones Ecuador Parapente
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/ecuador-parapente/server
+EnvironmentFile=/var/www/ecuador-parapente/server/.env
+ExecStart=/usr/bin/node /var/www/ecuador-parapente/server/src/index.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
