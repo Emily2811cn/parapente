@@ -31,9 +31,9 @@ button:hover{background:#e78108}
 .cloud:before,.cloud:after{content:'';position:absolute;background:#fff;border-radius:50%}
 .cloud:before{width:32px;height:32px;left:16px;bottom:4px}
 .cloud:after{width:44px;height:44px;left:37px;bottom:3px}
-.cloud-a{top:56px;left:8%}
-.cloud-b{top:27px;right:9%;transform:scale(.6)}
-.glider{position:absolute;right:110px;top:20px;width:62px;height:auto;color:#ffc400;transform:rotate(8deg);z-index:1}
+.cloud-a{top:56px;left:38%}
+.cloud-b{top:14px;right:9%;transform:scale(.6)}
+.glider{position:absolute;right:170px;top:24px;width:56px;height:auto;color:#ffc400;transform:rotate(8deg);z-index:1}
 .gift-card header{height:0;position:relative;z-index:2}
 .gift-card header img{width:108px;position:absolute;top:-73px;left:22px;background:#fff;border-radius:8px;padding:3px}
 .voucher{position:absolute;right:22px;top:-78px;background:#fff;color:#0087b7;border-radius:7px;padding:8px 11px;font-size:.57rem;letter-spacing:.1em;text-align:right}
