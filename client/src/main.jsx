@@ -15,7 +15,16 @@ const displayMessage = (data) => data.message.trim() || defaultMessage(data);
 function GiftCard({ data, final = false }) {
   const birthday = Boolean(data.birthday);
   return <article className={`gift-card ${birthday ? 'birthday' : ''}`}>
-    <div className="card-sky"><span className="cloud cloud-a"/><span className="cloud cloud-b"/><span className="glider">◢</span></div>
+    <div className="card-sky"><span className="cloud cloud-a"/><span className="cloud cloud-b"/>
+      <svg className="glider" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 18 Q50 -10 96 18 Q80 27 65 19 Q50 30 35 19 Q20 27 4 18 Z" fill="currentColor"/>
+        <line x1="14" y1="19" x2="42" y2="46" stroke="currentColor" strokeWidth="2"/>
+        <line x1="86" y1="19" x2="58" y2="46" stroke="currentColor" strokeWidth="2"/>
+        <line x1="35" y1="20" x2="46" y2="46" stroke="currentColor" strokeWidth="2"/>
+        <line x1="65" y1="20" x2="54" y2="46" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="50" cy="49" r="4" fill="currentColor"/>
+      </svg>
+    </div>
     <header><img src={logo} alt="Ecuador Parapente"/><div className="voucher">VALE DE REGALO<br/><strong>PARAPENTE</strong></div></header>
     <section className="card-main">
       <p className="eyebrow">UNA AVENTURA SOBRE EL PACÍFICO</p>
