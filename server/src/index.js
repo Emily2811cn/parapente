@@ -14,6 +14,19 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN?.split(',') || true }));
 app.use(express.json({ limit: '20kb' }));
 app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, max: 250, standardHeaders: true, legacyHeaders: false }));
 
+// Borra automáticamente las invitaciones con más de RETENTION_DAYS desde su creación,
+// para que la tabla no siga creciendo. Corre una vez al iniciar la API y luego cada 24h.
+const RETENTION_DAYS = 30;
+const CLEANUP_INTERVAL_MS = 24 * 60 * 60 * 1000;
+async function cleanupOldInvitations() {
+  try {
+    const result = await pool.query(`DELETE FROM invitations WHERE created_at < NOW() - INTERVAL '${RETENTION_DAYS} days'`);
+    if (result.rowCount) console.log(`Limpieza automática: se eliminaron ${result.rowCount} invitación(es) con más de ${RETENTION_DAYS} días.`);
+  } catch (e) { console.error('Error en limpieza automática de invitaciones:', e); }
+}
+cleanupOldInvitations();
+setInterval(cleanupOldInvitations, CLEANUP_INTERVAL_MS);
+
 const clean = value => value.trim().replace(/\s+/g, ' ');
 const invitationSchema = z.object({
   clientName: z.string().trim().min(2, 'El nombre debe tener al menos 2 caracteres.').max(120),
