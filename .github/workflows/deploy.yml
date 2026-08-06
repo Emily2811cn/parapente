@@ -23,4 +23,7 @@ jobs:
             npm ci --prefix server
             npm ci --prefix client
             npm run build
+            rm -rf client/node_modules
+            npm cache clean --force
+            sudo journalctl --vacuum-size=50M
             sudo systemctl restart ec-parapente-api
