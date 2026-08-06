@@ -58,5 +58,20 @@ function PublicInvitation({ code }) {
   if (state.error) return <div className="center"><h1>Invitación no encontrada</h1><p>{state.error}</p></div>;
   return <main className="public-page"><GiftCard data={state.data} final/><p className="public-brand">ECUADOR PARAPENTE · Montañita, Ecuador</p></main>;
 }
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { hasError: false }; }
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error, info) { console.error('Error atrapado por ErrorBoundary:', error, info); }
+  render() {
+    if (this.state.hasError) {
+      return <div className="center">
+        <h1>Algo salió mal</h1>
+        <p>No pudimos mostrar esta página. Intenta recargar en unos minutos.</p>
+      </div>;
+    }
+    return this.props.children;
+  }
+}
+
 function App() { const match = location.pathname.match(/^\/invitacion\/([^/]+)$/); return match ? <PublicInvitation code={match[1]}/> : <Admin/>; }
-createRoot(document.getElementById('root')).render(<App/>);
+createRoot(document.getElementById('root')).render(<ErrorBoundary><App/></ErrorBoundary>);
